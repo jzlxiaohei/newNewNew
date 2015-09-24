@@ -85,3 +85,7 @@ React.render((
     ), document.getElementById('mount-dom')
 )
 
+window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
+    alert('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber
+        + ' Column: ' + column + ' StackTrace: ' +  errorObj);
+}
