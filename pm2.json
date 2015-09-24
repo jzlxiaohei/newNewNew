@@ -1,0 +1,9 @@
+{
+  "apps" : [{
+    "name"        : "dapigu",
+    "script"      : "index.js",
+    "watch"       : true,
+    "exec_mode"   : "fork",
+    "max_memory_restart": "200M"
+  }]
+}
