@@ -67,9 +67,13 @@ const actionMethods={
             state.posts.push(item)
         })
         var page = state.page + 1;
+
         return utils.State.setShallow(state,{
             isLoading:false,
-            posts:state.posts,
+            posts:state.posts.map(item=>{
+                item.imageUrl = item.imageUrl +'!index-news-cover'
+                return item;
+            }),
             page:page
         })
     },

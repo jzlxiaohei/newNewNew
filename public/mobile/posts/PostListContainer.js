@@ -44,7 +44,7 @@ export default class PostListContainer extends Component{
         list = list.map(item=>{
             var d = new Date (item.createdAt*1000);
             item.createdTime = formatTime(d)
-            item.imageUrl=item.imageUrl+'!index-news-cover'
+            item.imageUrl=item.imageUrl
             return item;
         })
         return (
