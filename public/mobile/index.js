@@ -67,7 +67,9 @@ class AppComponent extends React.Component{
         return (
             <div>
                 <div className={postListClassName}>
-                    <div className='app-header'>Header</div>
+                    <div className='app-header'>
+                        <div className='app-title'>华尔街见闻</div>
+                    </div>
                     <PostListElement/>
                 </div>
                 <div className={postDetailClassName}>

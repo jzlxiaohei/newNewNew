@@ -3,6 +3,8 @@ var webpack = require('webpack')
 var path = require('path')
 var AssetsPlugin         = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({});
+var autoprefixer = require('autoprefixer');
+var precss      = require('precss');
 
 
 module.exports = {
@@ -45,10 +47,10 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: "babel-loader?stage=0&optional[]=runtime"
             },
-            { test: /\.css$/, loader: "style!css" },
+            { test: /\.css$/, loader: "style!css!postcss-loader" },
             {
                 test: /\.less$/,
-                loader: "style-loader!css-loader!less-loader"
+                loader: "style-loader!css-loader!postcss-loader!less-loader"
             }
         ]
     },
@@ -57,5 +59,8 @@ module.exports = {
         //new webpack.HotModuleReplacementPlugin(),
         assetsPluginInstance,
         new webpack.OldWatchingPlugin()//新版的不知道为啥不watch，用这个可以临时解决。
-    ]
+    ],
+    postcss: function () {
+        return [autoprefixer, precss];
+    }
 }
