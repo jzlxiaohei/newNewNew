@@ -64,16 +64,14 @@ const actionMethods={
     },
     loadPost_s(state,data){
         data.forEach(item=>{
+            item.imageUrl = item.imageUrl +'!index-news-cover'
             state.posts.push(item)
         })
         var page = state.page + 1;
 
         return utils.State.setShallow(state,{
             isLoading:false,
-            posts:state.posts.map(item=>{
-                item.imageUrl = item.imageUrl +'!index-news-cover'
-                return item;
-            }),
+            posts:state.posts,
             page:page
         })
     },

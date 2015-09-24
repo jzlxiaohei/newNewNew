@@ -1,8 +1,9 @@
 //import React from 'react'
 import React from 'react' ;
 import {Router,Route,Link,IndexRoute} from 'react-router'
-import urllite from 'urllite'
-
+//import urllite from 'urllite'
+import FastClick from 'fastclick'
+FastClick.attach(document.body);
 
 import PostListStore from './store/PostListStore.js'
 import PostDetailStore from './store/PostDetailStore.js'
@@ -49,7 +50,6 @@ class AppComponent extends React.Component{
     }
 
     componentDidMount(){
-        console.log('app mount')
         postListStore.loadPost();
         window.addEventListener('hashchange',e=>{this.navigator(location.hash)})
     }
