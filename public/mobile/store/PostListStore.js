@@ -32,7 +32,6 @@ export default class PostListStore extends BaseStore{
         )
             .then(res=> res.json())
             .then(res=>{
-                alert(res)
                 this.dispatch(ActionTypes.LOAD_POST_S,res.results)
             })
             .catch(res=>{

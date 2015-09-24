@@ -1,6 +1,8 @@
 //import React from 'react'
 import React from 'react' ;
 import {Router,Route,Link,IndexRoute} from 'react-router'
+
+require('es6-promise').polyfill();
 //import urllite from 'urllite'
 import FastClick from 'fastclick'
 FastClick.attach(document.body);
