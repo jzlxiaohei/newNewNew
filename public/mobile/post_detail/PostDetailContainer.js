@@ -49,7 +49,7 @@ class PostDetailContainer extends Component{
         return (
             <div className='post-detail-container'>
                  <div className='app-header'>
-                 <Link className='app-header-left' onClick={()=>this.props.history.goBack()}> {"< back"} </Link>
+                 <a className='app-header-left' onClick={()=>this.props.history.goBack()}> {"< 返回"} </a>
                  <div className='app-title'>文章详情</div>
                  <a className='app-header-right' href='/'> </a>
                  </div>
