@@ -28,7 +28,6 @@ export default class PostListContainer extends Component{
     componentDidMount(){
         const store = this.props.store;
         store.loadInitPosts();
-
     }
 
     fetchData(){

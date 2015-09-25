@@ -1,13 +1,16 @@
 import {Component} from 'react'
 import utils from '../utils/utils.js'
+import ReactMixin from 'react-mixin'
+import {History} from 'react-router'
 
 import {Link} from 'react-router'
 import PostDetail from './components/PostDetail.js'
 import CommonError from '../error/CommonError.js'
 
+
 import './post-detail.less'
 
-export default class PostDetailContainer extends Component{
+class PostDetailContainer extends Component{
     constructor(props,context){
         super(props,context)
     }
@@ -42,11 +45,11 @@ export default class PostDetailContainer extends Component{
             return <div style={{textAlign:'center'}}>loading</div>
         }
 
+
         return (
             <div className='post-detail-container'>
-
                  <div className='app-header'>
-                 <Link className='app-header-left' to='/'> {"< back"} </Link>
+                 <Link className='app-header-left' onClick={()=>this.props.history.goBack()}> {"< back"} </Link>
                  <div className='app-title'>文章详情</div>
                  <a className='app-header-right' href='/'> </a>
                  </div>
@@ -56,6 +59,9 @@ export default class PostDetailContainer extends Component{
 
     }
 }
+ReactMixin(PostDetailContainer.prototype,History)
+
+export default PostDetailContainer;
 
 /*
  <div className='app-header'>

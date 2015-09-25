@@ -1,11 +1,12 @@
 import {Component} from 'react'
-
+const { array, func, object } = React.PropTypes
 
 export default class PostList extends Component{
 
     static defaultProps={
         list:[]
     }
+
 
     constructor(props,context){
         super(props,context)
