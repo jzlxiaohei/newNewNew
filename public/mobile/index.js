@@ -1,9 +1,8 @@
-//import React from 'react'
 import React from 'react' ;
 import {Router,Route,Link,IndexRoute} from 'react-router'
+import utils from './utils/utils.js'
 
 require('es6-promise').polyfill();
-//import urllite from 'urllite'
 import FastClick from 'fastclick'
 FastClick.attach(document.body);
 
@@ -23,71 +22,72 @@ const PostListElement = enhanceWithStore(PostListContainer,postListStore)
 const PostDetailElement = enhanceWithStore(PostDetailContainer,postDetailStore)
 
 
-class AppComponent extends React.Component{
-
+class App extends React.Component{
     constructor(props,context){
         super(props,context)
+
+        postListStore.subscribe((e,state)=>{
+            if(state.isLoading !=this.state.isLoading){
+                this.setState({
+                    isLoading:state.isLoading
+                })
+            }
+        })
+        postDetailStore.subscribe((e,state)=>{
+            if(state.isLoading !=this.state.isLoading){
+                this.setState({
+                    isLoading:state.isLoading
+                })
+            }
+        })
     }
 
     state={
-        postListHide:false,
-        postDetailHide:true
+        isLoading:false
     }
 
-    navigator(path){
-        path= path || '#/'
-        if(path=='#/'){
-            this.setState({
-                postListHide:false,
-                postDetailHide:true
-            })
-        }else{
-            const postId = path.split('/')[2];
-            postDetailStore.loadPostDetail({postId:postId})
-            this.setState({
-                postListHide:true,
-                postDetailHide:false
-            })
+
+    render(){
+        const isLoading = this.state.isLoading
+        let loadingCoverClass='loading-cover'
+        if(!isLoading){
+            loadingCoverClass+=' hide'
         }
-    }
 
-    componentDidMount(){
-        postListStore.loadPost();
-        window.addEventListener('hashchange',e=>{this.navigator(location.hash)})
-    }
-
-    componentWillMount(){
-    }
-
-
-    render() {
-        let postListClassName='post-list-area',
-            postDetailClassName='post-detail-area'
-        if(this.state.postListHide){postListClassName+=' hide'}
-        if(this.state.postDetailHide){postDetailClassName+=' hide'}
-
-        return (
+        return(
             <div>
-                <div className={postListClassName}>
-                    <div className='app-header'>
-                        <div className='app-title'>华尔街见闻</div>
-                    </div>
-                    <PostListElement/>
+                <div className='app-header'>
+                    <div className='app-title'>华尔街见闻</div>
                 </div>
-                <div className={postDetailClassName}>
-                    <PostDetailElement/>
+                <div className='app-content'>
+                    {this.props.children}
+                </div>
+
+                <div className={loadingCoverClass}>
+                    <div className="spinner">
+                        <div className="bounce1"></div>
+                        <div className="bounce2"></div>
+                        <div className="bounce3"></div>
+                    </div>
                 </div>
             </div>
         )
     }
 }
 
-React.render((
-       <AppComponent/>
-    ), document.getElementById('mount-dom')
+console.log(utils.Scroll)
+React.render(
+    (
+        <Router>
+            <Route path="/" component={App}>
+                <IndexRoute  component={PostListElement}
+                             onEnter={()=>{ utils.Scroll.restoreScroll('PostList')}}
+                             onLeave={()=>{ utils.Scroll.setScroll('PostList') }} />
+                <Route path="posts/:postId" component={PostDetailElement} />
+            </Route>
+        </Router>
+    ),
+    document.getElementById('mount-dom')
 )
 
-window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
-    alert('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber
-        + ' Column: ' + column + ' StackTrace: ' +  errorObj);
-}
+

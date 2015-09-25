@@ -60,7 +60,39 @@ Utils.Time={
     }
 }
 
-
 Utils.getApiUrl=getApiUrl
+
+
+
+Utils.Scroll= createScrollMgr()
+
+
+function createScrollMgr(){
+    var scrollMap={}
+
+    return {
+        restoreScroll(key){
+            if(!(key in scrollMap)){
+                scrollMap[key] = {
+                    x:0,
+                    y:0
+                }
+            }
+            var _s =  scrollMap[key]
+            const x = _s.x,
+                y = _s.y;
+            window.scrollTo(x,y);
+        },
+        setScroll(key){
+            scrollMap[key] = {
+                x:window.pageXOffset || document.documentElement.scrollLeft,
+                y:window.pageYOffset || document.documentElement.scrollTop
+            }
+        },
+        deleteScroll(key){
+            delete scrollMap[key];
+        }
+    }
+}
 
 export default Utils

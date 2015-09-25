@@ -18,11 +18,19 @@ export default class PostListStore extends BaseStore{
         isLoading:false,
         posts:[],
         errMsg:'',
-        page:1
+        page:1,
+        initDataFetched:false
     }
 
-    loadPost() {
-        var page = this.state.page;
+    loadInitPosts(){
+        if(this.state.initDataFetched === false){
+            this.loadPosts()
+            this.state.initDataFetched=true;
+        }
+    }
+
+    loadPosts(page) {
+        page = page || this.state.page;
         this.dispatch(ActionTypes.LOAD_POST);
         fetch(
             utils.Url.generate(apiUrl,{page:page}),
@@ -43,11 +51,11 @@ export default class PostListStore extends BaseStore{
     reducer(type,payLoad){
         switch(type) {
             case ActionTypes.LOAD_POST:
-                return actionMethods.loadPost(this.state)
+                return actionMethods.loadPosts(this.state)
             case ActionTypes.LOAD_POST_S:
-                return actionMethods.loadPost_s(this.state, payLoad)
+                return actionMethods.loadPosts_s(this.state, payLoad)
             case ActionTypes.LOAD_POST_E:
-                return actionMethods.loadPost_e(this.state, payLoad)
+                return actionMethods.loadPosts_e(this.state, payLoad)
 
             default:
                 return this.state
@@ -56,14 +64,14 @@ export default class PostListStore extends BaseStore{
 }
 
 const actionMethods={
-    loadPost(state){
+    loadPosts(state){
         if(state.isLoading){
             return state;
         }else{
             return utils.State.setShallow(state,{isLoading:true})
         }
     },
-    loadPost_s(state,data){
+    loadPosts_s(state,data){
         data.forEach(item=>{
             item.imageUrl = item.imageUrl +'!index-news-cover'
             state.posts.push(item)
@@ -73,10 +81,11 @@ const actionMethods={
         return utils.State.setShallow(state,{
             isLoading:false,
             posts:state.posts,
-            page:page
+            page:page,
+            initDataFetched:true
         })
     },
-    loadPost_e(state,data){
+    loadPosts_e(state,data){
         return utils.State.setShallow(state,{
             isLoading:false,
             errMsg:data.errMsg

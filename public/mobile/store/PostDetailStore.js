@@ -11,6 +11,8 @@ const ActionTypes={
 }
 
 export default class PostListStore extends BaseStore{
+
+
     __className ='PostListStore'
 
     state = {
@@ -19,6 +21,7 @@ export default class PostListStore extends BaseStore{
         errMsg:null,
         postId:''
     }
+
 
     loadPostDetail(payLoad) {
         this.dispatch(ActionTypes.LOAD_POST_DETAIL,payLoad);
@@ -33,7 +36,6 @@ export default class PostListStore extends BaseStore{
             }
         ).then(res=> res.json())
             .then(res=>{
-                console.log(res)
                 this.dispatch(ActionTypes.LOAD_POST_DETAIL_S,res)
             })
             .catch(res=>{

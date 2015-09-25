@@ -21,15 +21,20 @@ export default class PostListContainer extends Component{
         super(props,context)
     }
 
-    componentDidMount(){
-
+    state={
+        wasInitDataFetched:false
     }
 
-    loadMoreHandle(){
+    componentDidMount(){
+        const store = this.props.store;
+        store.loadInitPosts();
+    }
+
+    fetchData(){
         const store = this.props.store;
         const state = store.getState();
         if(state.isLoading){return;}
-        store.loadPost()
+        store.loadPosts()
     }
 
     render() {
@@ -50,7 +55,7 @@ export default class PostListContainer extends Component{
         return (
             <div className='post-list-container'>
                 <PostList list={list}/>
-                <div className='posts-load-more' onClick={e=>{this.loadMoreHandle(e)}}>
+                <div className='posts-load-more' onClick={e=>{this.fetchData(e)}}>
                     <div className='load-more-button'>{isLoading?'数据加载中':'加载更多'}</div>
                 </div>
             </div>

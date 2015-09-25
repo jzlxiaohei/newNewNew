@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import urllite from 'urllite'
+import pathToRegexp from 'path-to-regexp'
 
 import detect from './detect.js'
 
@@ -28,6 +29,11 @@ var PropValidation = {
 export default (WrappedComponent)=>{
 
     return class extends Component{
+
+        constructor(props,context){
+            this.setState({ _routes: processRoutes(this.state.root, this.routes, this) });
+        }
+
         static propTypes=PropValidation
         static contextTypes= PropValidation
         static childContextTypes=PropValidation
@@ -44,6 +50,24 @@ export default (WrappedComponent)=>{
 
         componentWillMount() {
             this.setState({ _routes: processRoutes(this.state.root, this.routes, this) });
+        }
+
+        processRoutes(root, routes, component) {
+            var patterns = [],
+                path, pattern, keys, handler, handlerFn;
+
+            for (path in routes) {
+                if (routes.hasOwnProperty(path)) {
+                    keys = [];
+                    pattern = pathToRegexp(root + path, keys);
+                    handler = routes[path];
+                    handlerFn = component[handler];
+
+                    patterns.push({ pattern: pattern, params: keys, handler: handlerFn });
+                }
+            }
+
+            return patterns;
         }
 
         componentDidMount() {
@@ -117,7 +141,7 @@ export default (WrappedComponent)=>{
 
         render(){
 
-            <WrappedComponent {...this.props}/>
+            <WrappedComponent {...this.props} />
         }
     }
 
