@@ -46,6 +46,9 @@ class App extends React.Component{
         isLoading:false
     }
 
+    componentDidMount(){
+
+    }
 
     render(){
         const isLoading = this.state.isLoading
@@ -81,7 +84,7 @@ React.render(
         <Router>
             <Route path="/" component={App}>
                 <IndexRoute  component={PostListElement}
-                             onEnter={()=>{ utils.Scroll.restoreScroll('PostList')}}
+                             onEnter={()=>{ utils.Scroll.restoreScroll('PostList') }}
                              onLeave={()=>{ utils.Scroll.setScroll('PostList') }} />
                 <Route path="posts/:postId" component={PostDetailElement} />
             </Route>
