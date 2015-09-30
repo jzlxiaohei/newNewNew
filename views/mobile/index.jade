@@ -1,0 +1,9 @@
+extends ../layout/layout
+
+block headJs
+    script(src=getStatic('/lib/react.js'))
+
+block content
+    div(id='mount-dom')
+
+    script(src=getStatic('mobile/index.js'))
