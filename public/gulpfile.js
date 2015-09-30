@@ -17,7 +17,7 @@ gulp.task('default',function(callback){
         entryItem.splice(index,1)
     }
     //console.log(config.entry)
-
+    config.devtool='source-map';
     config.plugins = config.plugins || [];
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({
         mangle: {

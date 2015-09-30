@@ -1,8 +1,6 @@
 import React from 'react' ;
 import {Router,Route,Link,IndexRoute} from 'react-router'
 import utils from './utils/utils.js'
-import {createHistory,useBasename} from 'history';
-import createBrowserHistory from 'history/lib/createBrowserHistory.js';
 require('es6-promise').polyfill();
 import FastClick from 'fastclick'
 FastClick.attach(document.body);
