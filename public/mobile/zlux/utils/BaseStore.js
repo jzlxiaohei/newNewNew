@@ -30,7 +30,7 @@ export default class BaseStore{
         var _this =this;
         this.wrappedDispatch= this.middlewareFns.reduceRight((a,b)=>{
             return ()=>{
-                b(a,_this.__curAction,_this.getState())
+                b(a,_this.__curAction,_this)
             }
         },this.__dispatch)
     }

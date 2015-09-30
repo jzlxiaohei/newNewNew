@@ -20,12 +20,13 @@ const postListStore = new PostListStore()
 const postDetailStore = new PostDetailStore();
 
 postListStore.use(
-    function(next,action,state){
+    function(next,action,store){
         //console.log('postListStore:with',action,'state before:',state,`color: #9E9E9E; font-weight: bold`)
-        console.log(`%c before dispatch :state`, `color: #9E9E9E; font-weight: bold`, state);
+        console.log(`%c before dispatch :state`, `color: #9E9E9E; font-weight: bold`, store.getState());
         console.log(`%c action`, `color: #03A9F4; font-weight: bold`, action);
         next()
-        console.log(`%c after dispatch :state`, `color: #9E9E9E; font-weight: bold`, state);
+        console.log(`%c after dispatch :state`, `color: #9E9E9E; font-weight: bold`, store.getState());
+
         //console.log('postListStore:with',action,'state after:',state,`color: #4CAF50; font-weight: bold`)
     }
 )
