@@ -23,7 +23,7 @@ postListStore.use(
         console.log(`%c before dispatch :state`, `color: #9E9E9E; font-weight: bold`, store.getState());
         console.log(`%c action`, `color: #03A9F4; font-weight: bold`, action);
         next()
-        console.log(`%c after dispatch :state`, `color: #9E9E9E; font-weight: bold`, store.getState());
+        console.log(`%c after dispatch :state`, `color: #4CAF50; font-weight: bold`, store.getState());
         console.log(`%c ============ 华丽的分隔符 ============ `, `background: #0af;color:#fff; `);
     }
 )
