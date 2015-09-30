@@ -24,7 +24,7 @@ require('./init')(app)
 app.use(express.static(__dirname + '/public'))
 app.use(express.static(__dirname + '/static_page'))
 
-
+console.log(config)
 if (config.isProduction) {
     console.log('run in prod mode')
     app.use(function(err, req, res, next) {

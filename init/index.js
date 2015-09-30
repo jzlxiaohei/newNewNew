@@ -5,7 +5,7 @@
 
 module.exports = function(app){
     //init global first
-    //require('./initGlobalVariable')
+    require('./initGlobalVariable')
 
     require('./initViewHelper.js')(app)
 

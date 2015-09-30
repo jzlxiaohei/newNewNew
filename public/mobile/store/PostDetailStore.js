@@ -10,10 +10,10 @@ const ActionTypes={
     LOAD_POST_DETAIL_E:'LOAD_POST_DETAIL_E'
 }
 
-export default class PostListStore extends BaseStore{
+export default class PostDetailStore extends BaseStore{
 
 
-    __className ='PostListStore'
+    __className ='PostDetailStore'
 
     state = {
         isLoading:false,
@@ -24,7 +24,7 @@ export default class PostListStore extends BaseStore{
 
 
     loadPostDetail(payLoad) {
-        this.dispatch(ActionTypes.LOAD_POST_DETAIL,payLoad);
+        this.dispatch({type:ActionTypes.LOAD_POST_DETAIL,payLoad});
 
         var postId = this.state.postId;
         let apiUrl = utils.getApiUrl("/api/posts/:postId",{postId:postId})
@@ -36,15 +36,17 @@ export default class PostListStore extends BaseStore{
             }
         ).then(res=> res.json())
             .then(res=>{
-                this.dispatch(ActionTypes.LOAD_POST_DETAIL_S,res)
+                this.dispatch({type:ActionTypes.LOAD_POST_DETAIL_S,payLoad:res})
             })
             .catch(res=>{
             //TODO error msg
-            this.dispatch(ActionTypes.LOAD_POST_DETAIL_E,{errMsg:res.stack})
+            this.dispatch({type:ActionTypes.LOAD_POST_DETAIL_E,payLoad:{errMsg:res.stack}})
         })
     }
 
-    reducer(type,payLoad){
+    reducer(action){
+        const type = action.type,
+            payLoad = action.payLoad;
         switch(type) {
             case ActionTypes.LOAD_POST_DETAIL:
                 return actionMethods.loadPostDetail(this.state,payLoad)
@@ -79,18 +81,18 @@ const actionMethods={
             })
         }
     },
-    loadPostDetail_s(state,data){
-        var postObj = data;
+    loadPostDetail_s(state,payLoad){
+        var postObj = payLoad;
         return utils.State.setShallow(state,{
             isLoading:false,
             postObj:postObj,
             errMsg:null
         })
     },
-    loadPostDetail_e(state,data){
+    loadPostDetail_e(state,payLoad){
         return utils.State.setShallow(state,{
             isLoading:false,
-            errMsg:data.errMsg
+            errMsg:payLoad.errMsg
         })
     }
 }

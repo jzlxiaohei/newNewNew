@@ -81,7 +81,6 @@ function createScrollMgr(){
             var _s =  scrollMap[key]
             const x = _s.x,
                 y = _s.y;
-            console.log(y)
             setTimeout(function(){
                 window.scrollTo(x,y);
             },0)

@@ -31,7 +31,7 @@ export default class PostListStore extends BaseStore{
 
     loadPosts(page) {
         page = page || this.state.page;
-        this.dispatch(ActionTypes.LOAD_POST);
+        this.dispatch({type:ActionTypes.LOAD_POST});
         fetch(
             utils.Url.generate(apiUrl,{page:page}),
             {
@@ -40,15 +40,17 @@ export default class PostListStore extends BaseStore{
         )
             .then(res=> res.json())
             .then(res=>{
-                this.dispatch(ActionTypes.LOAD_POST_S,res.results)
+                this.dispatch({type:ActionTypes.LOAD_POST_S,payLoad:res.results})
             })
             .catch(res=>{
             //TODO error msg
-            this.dispatch(ActionTypes.LOAD_POST_E,{errMsg:'请求出现错误'})
+            this.dispatch({type:ActionTypes.LOAD_POST_E,payLoad:{errMsg:'请求出现错误'}})
         })
     }
 
-    reducer(type,payLoad){
+    reducer(action){
+        const type = action.type,
+            payLoad = action.payLoad;
         switch(type) {
             case ActionTypes.LOAD_POST:
                 return actionMethods.loadPosts(this.state)
@@ -71,8 +73,8 @@ const actionMethods={
             return utils.State.setShallow(state,{isLoading:true})
         }
     },
-    loadPosts_s(state,data){
-        data.forEach(item=>{
+    loadPosts_s(state,payLoad){
+        payLoad.forEach(item=>{
             item.imageUrl = item.imageUrl +'!index-news-cover'
             state.posts.push(item)
         })
@@ -85,10 +87,10 @@ const actionMethods={
             initDataFetched:true
         })
     },
-    loadPosts_e(state,data){
+    loadPosts_e(state,payLoad){
         return utils.State.setShallow(state,{
             isLoading:false,
-            errMsg:data.errMsg
+            errMsg:payLoad.errMsg
         })
     }
 }

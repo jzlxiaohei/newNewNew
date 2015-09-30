@@ -1,6 +1,12 @@
 doctype
 html(lang="en")
     head
-        block title
+        block headCss
+
+        block debug
+            !{getDebugScript()}
+
+        block headJs
+
     body
         block content
