@@ -51,7 +51,7 @@ export default class BaseStore{
         if(typeof action !='object' || !action.type){
             throw new Error('dispatch function  need a action object with "type" property')
         }
-        this.state = this.reducer(action);
+        this.state = this.reduce(action);
         this.listeners.forEach(listen=>{
             listen(action,this.getState())
         })
@@ -75,8 +75,8 @@ export default class BaseStore{
     }
 
 
-    reducer(action){
-        throw new Error('subClass fo BaseStore should implement reducer function')
+    reduce(action){
+        throw new Error('subClass fo BaseStore should implement reduce function')
     }
 
     getState(){

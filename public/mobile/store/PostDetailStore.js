@@ -44,7 +44,7 @@ export default class PostDetailStore extends BaseStore{
         })
     }
 
-    reducer(action){
+    reduce(action){
         const type = action.type,
             payLoad = action.payLoad;
         switch(type) {

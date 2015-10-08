@@ -21,13 +21,13 @@ export default class PostListContainer extends Component{
         super(props,context)
     }
 
-    state={
-        wasInitDataFetched:false
-    }
+    //state={
+    //    wasInitDataFetched:false
+    //}
 
     componentDidMount(){
         const store = this.props.store;
-        store.loadInitPosts();
+        store.loadInitPosts()
     }
 
     fetchData(){
