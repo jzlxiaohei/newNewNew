@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div style="-webkit-transfrom:translateZ(0)">
+        <canvas id="canvas" width="800" height="600"  style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+        <canvas id="canvas-event"  width="800" height="600" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+    </div>
+    <!--<script src="../build/FCharts.js"></script>-->
+    <script src="http://localhost:8080/build/FCharts.js"></script>
+    <script src="../build/HsPublic.js"></script>
+    <script>
+
+
+        var dateStr2Obj=function(str){
+            //201508130932
+            str = str+''
+            var year = +str.substring(0,4),
+                    mouth = +str.substring(4,6),
+                    day = +str.substring(6,8),
+                    hour = +str.substring(8,10),
+                    minute = +str.substring(10,12)
+            return new Date(year,mouth-1,day,hour,minute)
+        }
+
+        var Constant = FCharts.Constant;
+        var defaultStyle = FCharts.DefaultStyle;
+        defaultStyle.canvasColor='#242424'
+        var chart = new FCharts.Chart({
+            ctx: document.getElementById('canvas').getContext('2d'),
+            eventCanvas: document.getElementById('canvas-event'),
+            drawCanvas: document.getElementById('canvas'),
+            xAxis: {
+                fixedCount: 240,
+                range: [20, 360],
+                data: []
+            },
+            tips:function(item){
+                return '';
+            },
+//            zoomable:true,
+//            movable:true,
+            series: {
+                '1m_bar':{
+                    range:[260,400],
+                    type:'bar',
+                    data:[],
+                    yGridOn:true,
+                    tickCount:5,
+                    candleData:[],
+                    labels:[ {
+                        pos:'right',
+                        place:'inner',
+                        value:function(item){
+                            if(item>1000000){
+                                var num = Math.round(item/1000000)
+                                return num+'万手'
+                            }
+                            return ( Math.round(item/100) )+ '手'
+                        }
+                    }],
+                    dataMin:0,
+                    gridColor: '#a9a9a9'
+//                    niceTick:true
+                },
+                '1m_line_avg':{
+                    range: [20, 230],
+                    data: [],
+                    type: 'avgLine',
+                    parentSeries:'1m_line_real',
+                    style:{
+                        line:{
+                            brushType:'stroke',
+                            lineWidth:1,
+                            strokeStyle:'#0af'
+                        }
+                    }
+                },
+                '1m_line_real':{
+                    axisType:Constant.YAxisType.SYMMETRY,
+                    range: [20, 230],
+                    data: [],
+                    type: 'line',
+                    tickCount: 5,
+                    niceTick:false,
+                    gridColor: '#555',
+                    yGridOn:true,
+                    xGridOn:true,
+                    xTickList:{
+                        data:[
+                            {x:20,text:{text:'9点30分',textAlign:'left'}},
+                            {x:190,text:{text:'11点30分'}},
+                            {x:360,text:{text:'15点00分',textAlign:'right'}},
+                        ]
+                    },
+                    labels:[{
+                        pos: 'left',
+                        top:2,
+                        place:'inner',
+                        value: function (i) {
+                            return ((i*preclose)+preclose).toFixed(2)
+                        },
+                        style:function(domainValue,rangeValue){
+                            if(domainValue==0){
+                                return {
+                                    fillStyle:'#a9a9a9'
+                                }
+                            }else if(domainValue<0){
+                                return{
+                                    fillStyle:'#50c88c'
+                                }
+                            }else{
+                                return {
+                                    fillStyle:'#f85c5c'
+                                }
+                            }
+                        }
+                    },{
+                        pos: 'right',
+                        place:'inner',
+                        top:2,
+                        value: function (i) {
+                            return (i*100).toFixed(2)
+                        },
+                        style:function(domainValue){
+                            if(domainValue==0){
+                                return {
+                                    fillStyle:'#a9a9a9'
+                                }
+                            }else if(domainValue<0){
+                                return{
+                                    fillStyle:'#50c88c'
+                                }
+                            }else{
+                                return {
+                                    fillStyle:'#f85c5c'
+                                }
+                            }
+                        }
+//                            color:'red'//not used
+                    }],
+                    xTextFormat: function (item) {
+                        return item.getHours() + '时:' + item.getMinutes() + '分';
+                    },
+                    line:{
+                        brushType:'stroke',
+                        lineWidth:1,
+                        strokeStyle:'#fff'
+                    }
+                }
+            }
+        })
+
+        var preclose
+        var real=HsDataFactoryList['real']({
+            en_prod_code:'600570.SS',
+            fields:'preclose_px'
+        }).onDataReady(function(e){
+            console.log(e)
+
+            var ssObj = e.snapshot;
+
+            var fields = ssObj.fields;
+            var _m = {}
+            for(var i = 0;i<fields.length;i++){
+                _m[fields[i]] = i;
+            }
+
+            preclose= ssObj['600570.SS'][_m['preclose_px']]
+        }).init()
+
+        var trend = HsDataFactoryList['trend']({
+                prod_code:'600570.SS',
+                fields:'last_px,avg_px,business_amount'
+        },{
+            loop:true
+        }).onDataReady(function(e){
+            if(!preclose){
+                return ;
+            }
+            var trendObj = e.trend;
+
+            var fields = trendObj.fields;
+            var _m = {}
+            for(var i = 0;i<fields.length;i++){
+                _m[fields[i]] = i;
+            }
+
+
+            var data = trendObj['600570.SS']
+
+
+            var xData = [],pxData=[],barData=[],avgData=[],candleData=[];
+            data.forEach(function(item,index){
+                xData.push(dateStr2Obj(item[_m['min_time']]))
+                pxData.push( (item[_m['last_px']]-preclose)/preclose  )
+
+                var preAmount= index >0? data[index-1][_m['business_amount']] : 0
+                var pre_px = index>0? data[index-1][_m['last_px']] : 0
+
+                barData.push(item[_m['business_amount']] -preAmount)
+                avgData.push(( item[_m['avg_px']]-preclose) /preclose)
+                candleData.push({
+                    open:pre_px,
+                    close:item[_m['last_px']]
+                })
+            })
+
+
+            chart.setData({
+                x:xData,
+                '1m_bar':{
+                    data:barData,
+                    candleData:candleData
+                },
+                '1m_line_real':pxData,
+                '1m_line_avg':avgData
+            })
+            chart.render();
+        }).init()
+
+    </script>
+</body>
+</html>

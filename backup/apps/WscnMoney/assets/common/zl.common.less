@@ -1,0 +1,25 @@
+@import 'zl/atomic.less';
+@import "zl/shape.less";
+@import 'zl/color.less';
+@import 'zl/tag.less';
+@import 'zl/container.less';
+
+
+.clearfix:after {
+  content: " "; /* Older browser do not support empty content */
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+.meter{
+  background: #f0f0f0;
+  background-size: 25% 100%;
+  height: 10px;
+  width: 100%;
+  .meter-value{
+    background: #007aff;
+    height: 10px;
+  }
+}
