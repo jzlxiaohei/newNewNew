@@ -6,5 +6,5 @@ module.exports={
     //Env:'prod',
     //Env:process.env.NODE_ENV=='production'?'production':'development',
     isProduction:process.env.NODE_ENV=='production',
-    port:8999
+    port:3333
 }
