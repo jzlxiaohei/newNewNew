@@ -64,14 +64,13 @@ export default class BaseStore{
 
 
     subscribe(listener){
-        var index = this.listeners.length
+        //var index = this.listeners.length
         this.listeners.push(listener);
 
-        return (index)=>{
-            return ()=>{
-                this.listeners.splice(index);
-            }
-        }(index)
+        return ()=>{
+            var index = this.listeners.indexOf(listener)
+            this.listeners.splice(index);
+        }
     }
 
 
@@ -85,3 +84,7 @@ export default class BaseStore{
 
 
 }
+
+<di>
+    <Datepcker/>
+</div>

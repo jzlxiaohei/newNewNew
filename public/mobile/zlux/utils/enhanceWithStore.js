@@ -11,7 +11,7 @@ export default (WrappedContainer,store) => {
 
             this.state.props = store.getState();
             this.unsubscribe = store.subscribe(()=>{
-                if(this.state.props == store.getState()){return ;}
+                if(this.state.props === store.getState()){return ;}
                 this.setState({
                     props:store.getState()
                 })

@@ -29,11 +29,14 @@ postListStore.use(
 )
 
 
-
+//container store: n：1
 
 const PostListElement = enhanceWithStore(PostListContainer,postListStore)
 const PostDetailElement = enhanceWithStore(PostDetailContainer,postDetailStore)
 
+postListStore.loadPosts()
+
+postListStore.loadPosts()
 
 class App extends React.Component{
     constructor(props,context){
@@ -104,3 +107,5 @@ React.render(
     document.getElementById('mount-dom')
 )
 
+
+<Container stroe= {ListStore}/>

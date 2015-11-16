@@ -3,7 +3,7 @@ var express = require('express')
 var app = express()
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var superagent = require('superagent')
 var config = require('./config')
 
 app.set('views', path.join(__dirname, 'views'));
@@ -20,6 +20,18 @@ app.use(bodyParser.urlencoded({
 }));
 
 require('./init')(app)
+
+//app.use(function(req,res,next){
+//    if(req.url.indexOf('FCharts.js')!=-1){
+//        superagent('http://localhost:8080/build/FCharts.js')
+//            .end(function(err,result){
+//                console.log(result)
+//                res.send(result.text)
+//            })
+//    }else{
+//        next()
+//    }
+//})
 
 app.use(express.static(__dirname + '/public'))
 app.use(express.static(__dirname + '/static_page'))
